@@ -174,12 +174,12 @@ class Address
   * @since   2016-08-05
   * @author  Wesley Dekkers <wesley@wd-media.nl> 
   **/
-  public function save_image_address($api_key, $address, $width, $height, $destination, $color='red', $zoom=13, $format="jpg", $map_type="roadmap"){
+  public static function save_image_address($api_key, $address, $width, $height, $destination, $color='red', $zoom=13, $format="jpg", $map_type="roadmap"){
     if(file_exists($destination)){
       unlink($destination);
     }
 
-    $src = "https://maps.googleapis.com/maps/api/staticmap?zoom=".$zoom."&size=".$width."x".$height."&maptype=".$roadmap."&format=".$format."&markers=color:".$color."%7C".$address."&key=".$api_key;
+    $src = "https://maps.googleapis.com/maps/api/staticmap?zoom=".$zoom."&size=".$width."x".$height."&maptype=".$map_type."&format=".$format."&markers=color:".$color."%7C".$address."&key=".$api_key;
 
     if(!copy($src, $destination)){
       $destination = false;
