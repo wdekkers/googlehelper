@@ -99,14 +99,13 @@ class Address
   * @since   2016-08-04
   * @author  Wesley Dekkers <wesley@wd-media.nl> 
   **/
-  public static function geo_code($key=NULL, $params=NULL){
+  public static function geo_code($key=NULL, $params=NULL, $exception = TRUE){
     // Make a valid query string so Google will accept this
     $query_string = self::prepare_query_string($params);
 
     // Check if key is set
     if(!$key){
       throw new Exception("No Google API Key is set");
-      
     }
 
     // Load the basic url
@@ -116,7 +115,8 @@ class Address
     $request_options = '?address='.$query_string.'&key='.$key;
 
     $result = json_decode(file_get_contents($request_url."".$request_options));
-    if($result->status != "OK"){
+    // When exception throw!
+    if($result->status != "OK" && $exception){
       throw new Exception("Google API Error: ".$result->status.", ".$result->error_message);
     }
 
