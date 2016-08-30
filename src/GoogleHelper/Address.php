@@ -9,7 +9,7 @@ namespace GoogleHelper;
 * @since     2016-08-04
 * @author    Wesley Dekkers <wesley@wd-media.nl>
 */
-class GoogleAddress
+class Address
 {
   /**
   * Load address info based on basic address data
