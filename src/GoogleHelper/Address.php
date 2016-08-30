@@ -16,7 +16,7 @@ class Address
   *
   * @example
   * <code>
-  * $result = \GoogleHelper\GoogleAddress::geo_code($API_KEY, $params);
+  * $result = \GoogleHelper\Address::geo_code($API_KEY, $params);
   * </code>
   *
   * @param String - Google API Key
@@ -131,7 +131,7 @@ class Address
   *
   * @example
   * <code>
-  * $query_string = \GoogleHelper\GoogleAddress::prepare_query_string($params);
+  * $query_string = \GoogleHelper\Address::prepare_query_string($params);
   * </code>
   *
   * @return query string
@@ -148,6 +148,44 @@ class Address
       $query_string .= ($query_string)? ",+".$param : $param;
     }
     return str_replace(" ","+",$query_string);
+  }
+
+  
+  /**
+  * Save a map image for an address with marker
+  *
+  * @param String - $api_key Google API key for 
+  * @param String - $address - address you want to load
+  * @param String - $width - width of the image
+  * @param String - $height - height of the image
+  * @param String - $destination - Where to save the image
+  * @param String - $color - red/... 
+  * @param String - $zoom - How far zoomed
+  * @param String - $format - jpg/png/gif
+  * @param String - $map_type road map / satelite
+  *
+  * @example
+  * <code>
+  * $query_string = \GoogleHelper\Address::save_image_address($api_key, $address, $width, $height, $destination, $color, $zoom, $format, $map_type);
+  * </code>
+  *
+  * @return String / Bool
+  *
+  * @since   2016-08-05
+  * @author  Wesley Dekkers <wesley@wd-media.nl> 
+  **/
+  public function save_image_address($api_key, $address, $width, $height, $destination, $color='red', $zoom=13, $format="jpg", $map_type="roadmap"){
+    if(file_exists($destination)){
+      unlink($destination);
+    }
+
+    $src = "https://maps.googleapis.com/maps/api/staticmap?zoom=".$zoom."&size=".$width."x".$height."&maptype=".$roadmap."&format=".$format."&markers=color:".$color."%7C".$address."&key=".$api_key;
+
+    if(!copy($src, $destination)){
+      $destination = false;
+    }
+
+    return $destination;
   }
 }
 ?>
