@@ -1,6 +1,6 @@
 <?php
-namespace GoogleHelper;
 
+namespace GoogleHelper;
 /**
 * Class to handle Google API address formats
 *
@@ -9,14 +9,14 @@ namespace GoogleHelper;
 * @since     2016-08-04
 * @author    Wesley Dekkers <wesley@wd-media.nl>
 */
-class Address
+class GoogleAddress
 {
   /**
   * Load address info based on basic address data
   *
   * @example
   * <code>
-  * \Rhonda\Google:: geo_code(API_KEY, $params);
+  * $result = \GoogleHelper\GoogleAddress::geo_code($API_KEY, $params);
   * </code>
   *
   * @param String - Google API Key
@@ -104,7 +104,10 @@ class Address
     $query_string = self::prepare_query_string($params);
 
     // Check if key is set
-    $key = ($key)? $key : \Rhonda\Config:: get('system')->google_api_key;
+    if(!$key){
+      throw new Exception("No Google API Key is set");
+      
+    }
 
     // Load the basic url
     $request_url = 'https://maps.googleapis.com/maps/api/geocode/json';
@@ -114,7 +117,7 @@ class Address
 
     $result = json_decode(file_get_contents($request_url."".$request_options));
     if($result->status != "OK"){
-      throw new \Exception("Google API Error: ".$result->status.", ".$result->error_message);
+      throw new Exception("Google API Error: ".$result->status.", ".$result->error_message);
     }
 
     return $result;
@@ -128,7 +131,7 @@ class Address
   *
   * @example
   * <code>
-  * \GoogleHelper\Address:: prepare_query_string($params);
+  * $query_string = \GoogleHelper\GoogleAddress::prepare_query_string($params);
   * </code>
   *
   * @return query string
@@ -138,7 +141,7 @@ class Address
   **/
   public static function prepare_query_string($params){
     // Check if parameters are set
-    if(!$params){throw new \Exception("Error no valid parameters set");}
+    if(!$params){throw new Exception("Error no valid parameters set");}
 
     $query_string = '';
     foreach ($params as $param) {
